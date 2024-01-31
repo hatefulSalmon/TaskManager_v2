@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <widget class="QScrollArea" name="groupLayout">
+     <widget class="QScrollArea" name="scrollarea_main">
       <property name="widgetResizable">
        <bool>true</bool>
       </property>
@@ -64,7 +64,7 @@
      <addaction name="actionBy_years"/>
     </widget>
     <addaction name="actionView_current_tasks"/>
-    <addaction name="actionView_compelted_tasks"/>
+    <addaction name="actionView_completed_tasks"/>
     <addaction name="menuSort_by_date"/>
     <addaction name="actionSort_by_group"/>
     <addaction name="actionView_unsorted"/>
@@ -93,9 +93,9 @@
     <string>View current tasks</string>
    </property>
   </action>
-  <action name="actionView_compelted_tasks">
+  <action name="actionView_completed_tasks">
    <property name="text">
-    <string>View compelted tasks</string>
+    <string>View completed tasks</string>
    </property>
   </action>
   <action name="actionSort_by_group">

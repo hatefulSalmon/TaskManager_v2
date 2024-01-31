@@ -1,16 +1,18 @@
 #include "group.h"
 #include "ui_group.h"
 #include "task.h"
+#include "taskdialog.h"
+
 #include <QVBoxLayout>
+#include <QDebug>
 Group::Group(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Group)
 {
     ui->setupUi(this);
     QWidget* container = new QWidget(this);
-    QVBoxLayout* tasksLayout = new QVBoxLayout(container);
+    new QVBoxLayout(container);
     ui->scrollarea_tasks->setWidget(container);
-
 }
 
 Group::~Group()
@@ -20,9 +22,21 @@ Group::~Group()
 
 void Group::on_button_addTask_clicked()
 {
-    Task* task = new Task();
-    ui->scrollarea_tasks->widget()->layout()->addWidget(task);
-    //ui->tasksLayout->addWidget(task);
-    //ui->groupLayout->widget()->layout()->addWidget(task);
+    emit creatingTask(this);
 }
 
+void Group::setGroupName(QString new_name){
+    ui->label_groupName->setText(new_name);
+}
+
+QString Group::get_name(){
+    return ui->label_groupName->text();
+}
+
+void Group::addTaskToUi(Task* task){
+    ui->scrollarea_tasks->widget()->layout()->addWidget(task);
+}
+
+void Group::removeTaskFromUi(Task* task){
+    ui->scrollarea_tasks->widget()->layout()->removeWidget(task);
+}

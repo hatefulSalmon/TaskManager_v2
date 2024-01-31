@@ -35,7 +35,7 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="label_groupName">
        <property name="text">
         <string>Group</string>
        </property>

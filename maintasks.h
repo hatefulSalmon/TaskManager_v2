@@ -3,6 +3,11 @@
 
 #include <QMainWindow>
 #include <QPushButton>
+#include <QVector>
+#include <QStackedWidget>
+#include "task.h"
+#include "taskdialog.h"
+#include "group.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainTasks; }
@@ -13,6 +18,11 @@ class MainTasks : public QMainWindow
     Q_OBJECT
 
 public:
+    QVector<Task*> all_tasks;
+    QVector<Group*> all_groups;
+    QStackedWidget* stack;
+
+
     MainTasks(QWidget *parent = nullptr);
     ~MainTasks();
 
@@ -20,12 +30,30 @@ signals:
     void groupAdded(QPushButton* button);
 
 public slots:
+    //Group actions
     void groupAdd();
 
+    //Task actions
+    void taskCreate(TaskInfo task_info);
+    void taskAddFromGroupped(Group* group);
+    void taskAddFromUngroupped();
+    void taskEdit(Task* task);
+    void taskDelete(Task* task);
+
 private slots:
-    void on_button_test_addGroup_clicked();
+
+    void on_actionView_unsorted_triggered();
+
+    void on_actionSort_by_group_triggered();
 
 private:
+    int getGroupIndex(QString group_name);
+    void addGroupToUi(Group* group);
+    void addTaskToGroupUi(Task* task);
+    void addTaskToUngrouppedUi(Task* task);
+    void setUpGroupped();
+    void setUpUngroupped();
     Ui::MainTasks *ui;
+
 };
 #endif // MAINTASKS_H

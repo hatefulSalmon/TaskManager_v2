@@ -12,17 +12,20 @@ SOURCES += \
     group.cpp \
     main.cpp \
     maintasks.cpp \
-    task.cpp
+    task.cpp \
+    taskdialog.cpp
 
 HEADERS += \
     group.h \
     maintasks.h \
-    task.h
+    task.h \
+    taskdialog.h
 
 FORMS += \
     group.ui \
     maintasks.ui \
-    task.ui
+    task.ui \
+    taskdialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
