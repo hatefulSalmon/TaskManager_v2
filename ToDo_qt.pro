@@ -9,25 +9,29 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    group.cpp \
-    main.cpp \
-    maintasks.cpp \
-    task.cpp \
-    taskdialog.cpp
+    src/group.cpp \
+    src/main.cpp \
+    src/maintasks.cpp \
+    src/task.cpp \
+    src/taskdialog.cpp
+
 
 HEADERS += \
-    group.h \
-    maintasks.h \
-    task.h \
-    taskdialog.h
+    headers/group.h \
+    headers/maintasks.h \
+    headers/task.h \
+    headers/taskdialog.h
+
 
 FORMS += \
-    group.ui \
-    maintasks.ui \
-    task.ui \
-    taskdialog.ui
+    ui/group.ui \
+    ui/maintasks.ui \
+    ui/task.ui \
+    ui/taskdialog.ui \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES +=
