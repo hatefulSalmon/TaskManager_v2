@@ -22,7 +22,8 @@ class Task : public QWidget
 signals:
     void taskEdit(Task* task);
     void taskDelete(Task* task);
-
+    void taskComplete(Task* task);
+    void taskUncomplete(Task* task);
 public:
     //Getters
     QString getName();
@@ -40,6 +41,10 @@ public:
     void setData(QString name, QString group, QDate creation_date, bool is_complete, QDate completion_date);
 
     void updateUI();
+    void enableCompleted();
+    void disableCompleted();
+    void changeToDoneButton();
+    void changeToUndoneButton();
 
     explicit Task(QWidget *parent = nullptr);
     ~Task();
@@ -48,6 +53,8 @@ private slots:
     void on_button_Edit_clicked();
 
     void on_button_Delete_clicked();
+
+    void on_button_Complete_clicked();
 
 private:
     QString task_name;

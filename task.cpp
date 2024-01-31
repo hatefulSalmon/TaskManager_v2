@@ -1,6 +1,6 @@
 #include "task.h"
 #include "ui_task.h"
-
+#include <QDebug>
 Task::Task(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Task)
@@ -53,10 +53,23 @@ void Task::setCompletionDate(QDate completion_date){
     this->completion_date = completion_date;
 }
 
+void Task::enableCompleted(){
+    this->ui->label_TaskCompleted->show();
+}
+
+void Task::disableCompleted(){
+    this->ui->label_TaskCompleted->hide();
+}
 
 void Task::updateUI(){
     this->ui->label_taskName->setText(this->getName());
-    this->ui->label_TaskDate->setText(this->getCreationDate().toString("dd.MMM.yyyy"));
+    this->ui->label_TaskDate->setText("Created:" + this->getCreationDate().toString("dd.MMM.yyyy"));
+    this->ui->label_TaskCompleted->setText("Done:" + this->getCompletionDate().toString("dd.MMM.yyyy"));
+    if(this->isComplete() == true){
+        this->enableCompleted();
+    }else{
+        this->disableCompleted();
+    }
 }
 
 
@@ -64,11 +77,22 @@ void Task::setData(QString name, QString group, QDate creation_date, bool is_com
     this->setName(name);
     this->setGroup(group);
     this->setCreationDate(creation_date);
+    this->setStatus(is_complete);
     if(this->isComplete()){
         this->setCompletionDate(completion_date);
     }
     this->setStatus(is_complete);
     updateUI();
+}
+
+void Task::changeToUndoneButton(){
+    ui->button_Complete->setText("Undone");
+
+}
+
+void Task::changeToDoneButton(){
+    ui->button_Complete->setText("Done");
+
 }
 
 Task::~Task()
@@ -85,5 +109,24 @@ void Task::on_button_Edit_clicked()
 void Task::on_button_Delete_clicked()
 {
     emit taskDelete(this);
+}
+
+
+void Task::on_button_Complete_clicked()
+{
+    if(ui->button_Complete->text() == "Done"){
+        changeToUndoneButton();
+        this->setStatus(true);
+        this->setCompletionDate(QDate::currentDate());
+        updateUI();
+        emit taskComplete(this);
+    }
+    else if(ui->button_Complete->text() == "Undone"){
+        changeToDoneButton();
+        this->setStatus(false);
+        updateUI();
+        emit taskUncomplete(this);
+    }
+
 }
 

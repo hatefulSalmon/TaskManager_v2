@@ -39,12 +39,16 @@ public slots:
     void taskAddFromUngroupped();
     void taskEdit(Task* task);
     void taskDelete(Task* task);
+    void taskComplete(Task* task);
+    void taskUncomplete(Task* task);
 
 private slots:
 
     void on_actionView_unsorted_triggered();
 
     void on_actionSort_by_group_triggered();
+
+    void on_actionView_completed_tasks_triggered();
 
 private:
     int getGroupIndex(QString group_name);
@@ -53,6 +57,7 @@ private:
     void addTaskToUngrouppedUi(Task* task);
     void setUpGroupped();
     void setUpUngroupped();
+    void setUpComplete();
     Ui::MainTasks *ui;
 
 };

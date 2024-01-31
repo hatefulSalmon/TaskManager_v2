@@ -55,17 +55,7 @@
     <property name="title">
      <string>Tasks</string>
     </property>
-    <widget class="QMenu" name="menuSort_by_date">
-     <property name="title">
-      <string>Sort by date...</string>
-     </property>
-     <addaction name="actionBy_days"/>
-     <addaction name="actionBy_months"/>
-     <addaction name="actionBy_years"/>
-    </widget>
-    <addaction name="actionView_current_tasks"/>
     <addaction name="actionView_completed_tasks"/>
-    <addaction name="menuSort_by_date"/>
     <addaction name="actionSort_by_group"/>
     <addaction name="actionView_unsorted"/>
    </widget>
@@ -88,11 +78,6 @@
     <string>Change color theme</string>
    </property>
   </action>
-  <action name="actionView_current_tasks">
-   <property name="text">
-    <string>View current tasks</string>
-   </property>
-  </action>
   <action name="actionView_completed_tasks">
    <property name="text">
     <string>View completed tasks</string>
@@ -106,21 +91,6 @@
   <action name="actionView_unsorted">
    <property name="text">
     <string>View unsorted</string>
-   </property>
-  </action>
-  <action name="actionBy_days">
-   <property name="text">
-    <string>By days</string>
-   </property>
-  </action>
-  <action name="actionBy_months">
-   <property name="text">
-    <string>By months</string>
-   </property>
-  </action>
-  <action name="actionBy_years">
-   <property name="text">
-    <string>By years</string>
    </property>
   </action>
  </widget>

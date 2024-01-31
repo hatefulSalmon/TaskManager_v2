@@ -46,6 +46,15 @@ MainTasks::MainTasks(QWidget *parent)
     connect(add_task, &QPushButton::clicked, this, &MainTasks::taskAddFromUngroupped);
     stack->addWidget(container_ungroupped);
 
+
+    //SETTING UP COMPLETE TASKS CONTAINER
+    QWidget* container_complete = new QWidget();
+    QVBoxLayout *complete_layout = new QVBoxLayout(container_complete);
+    complete_layout->setSizeConstraint(QLayout::SetMinimumSize);
+    complete_layout->setAlignment(Qt::AlignCenter);
+    stack->addWidget(container_complete);
+
+
     // Unsorted tasks
     if(getGroupIndex("Unsorted") == -1){
         Group* unsorted_group = new Group;
@@ -76,14 +85,26 @@ MainTasks::~MainTasks()
 void MainTasks::setUpGroupped(){
     stack->setCurrentIndex(0);
     for(int i = 0; i < all_tasks.size(); i++){
-        addTaskToGroupUi(all_tasks[i]);
+        if(all_tasks[i]->isComplete() != true){
+            addTaskToGroupUi(all_tasks[i]);
+        }
     }
 }
 
 void MainTasks::setUpUngroupped(){
     stack->setCurrentIndex(1);
     for(int i = 0; i < all_tasks.size(); i++){
-        addTaskToUngrouppedUi(all_tasks[i]);
+        if(all_tasks[i]->isComplete() != true){
+            addTaskToUngrouppedUi(all_tasks[i]);
+        }
+    }
+}
+
+void MainTasks::setUpComplete()
+{
+    stack->setCurrentIndex(2);
+    if(stack->currentWidget()->layout()->count() == 0){
+        QMessageBox::information(this, "No tasks", "You haven't completed any tasks yet.");
     }
 }
 
@@ -99,13 +120,23 @@ void MainTasks::addGroupToUi(Group* group){
 void MainTasks::addTaskToGroupUi(Task* task){
     for(int i = 0; i < all_groups.size(); i++){
         if(all_groups[i]->get_name() == task->getGroup()){
-            all_groups[i]->addTaskToUi(task);
+            if(task->isComplete()){
+                stack->widget(2)->layout()->addWidget(task);
+                task->changeToUndoneButton();
+                return;
+            }
+                all_groups[i]->addTaskToUi(task);
             return;
         }
     }
 }
 
 void MainTasks::addTaskToUngrouppedUi(Task* task){
+    if(task->isComplete()){
+        stack->widget(2)->layout()->addWidget(task);
+        task->changeToUndoneButton();
+        return;
+    }
     int elements = stack->currentWidget()->layout()->count();
     QLayoutItem* add_task = stack->currentWidget()->layout()->itemAt(elements-1);
     stack->currentWidget()->layout()->removeItem(add_task);
@@ -134,6 +165,8 @@ void MainTasks::taskCreate(TaskInfo task_info){
     new_task->setData(task_info.task_name, all_groups[task_info.task_group]->get_name(), task_info.creation_date, task_info.is_complete, task_info.complete_date);
     connect(new_task, &Task::taskEdit, this, &MainTasks::taskEdit);
     connect(new_task, &Task::taskDelete, this, &MainTasks::taskDelete);
+    connect(new_task, &Task::taskComplete, this, &MainTasks::taskComplete);
+    connect(new_task, &Task::taskUncomplete, this, &MainTasks::taskUncomplete);
     all_tasks.append(new_task);
 }
 
@@ -147,6 +180,11 @@ void MainTasks::taskAddFromGroupped(Group* group){
     if(get_task_data->exec() == QDialog::Accepted){
         TaskInfo task_info = get_task_data->get_values();
         taskCreate(task_info);
+        if(all_tasks.last()->isComplete()){
+            stack->widget(2)->layout()->addWidget(all_tasks.last());
+            all_tasks.last()->changeToUndoneButton();
+            return;
+        }
         all_groups[task_info.task_group]->addTaskToUi(all_tasks.last());
     }
 }
@@ -174,6 +212,7 @@ void MainTasks::taskEdit(Task* task){
     }
     get_task_data->set_groups(all_groups);
     get_task_data->set_dialog_data(task->getName(), group_index, task->getCreationDate(), task->isComplete(), task->getCompletionDate());
+    qDebug()<<task->isComplete();
     if(get_task_data->exec() == QDialog::Accepted){
         TaskInfo task_info = get_task_data->get_values();
         task->setData(task_info.task_name, all_groups[task_info.task_group]->get_name(), task_info.creation_date, task_info.is_complete, task_info.complete_date);
@@ -204,6 +243,10 @@ void MainTasks::taskDelete(Task* task){
 
 }
 
+void MainTasks::taskComplete(Task* task){
+    stack->widget(2)->layout()->addWidget(task);
+}
+
 int MainTasks::getGroupIndex(QString group_name){
     for(int i = 0; i < all_groups.size(); i++){
         if(all_groups[i]->get_name() == group_name){
@@ -211,6 +254,10 @@ int MainTasks::getGroupIndex(QString group_name){
         }
     }
     return -1;
+}
+
+void MainTasks::taskUncomplete(Task* task){
+    addTaskToGroupUi(task);
 }
 
 void MainTasks::on_actionView_unsorted_triggered()
@@ -222,5 +269,11 @@ void MainTasks::on_actionView_unsorted_triggered()
 void MainTasks::on_actionSort_by_group_triggered()
 {
     setUpGroupped();
+}
+
+
+void MainTasks::on_actionView_completed_tasks_triggered()
+{
+    setUpComplete();
 }
 
