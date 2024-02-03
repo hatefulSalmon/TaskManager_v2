@@ -212,10 +212,13 @@ void MainTasks::taskEdit(Task* task){
     }
     get_task_data->set_groups(all_groups);
     get_task_data->set_dialog_data(task->getName(), group_index, task->getCreationDate(), task->isComplete(), task->getCompletionDate());
-    qDebug()<<task->isComplete();
     if(get_task_data->exec() == QDialog::Accepted){
+        QString old_group = task->getGroup();
         TaskInfo task_info = get_task_data->get_values();
         task->setData(task_info.task_name, all_groups[task_info.task_group]->get_name(), task_info.creation_date, task_info.is_complete, task_info.complete_date);
+        if(task->getGroup() != old_group){
+            all_groups[task_info.task_group]->addTaskToUi(task);
+        }
     }
 }
 
