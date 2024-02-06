@@ -5,6 +5,8 @@
 #include <QPushButton>
 #include <QVector>
 #include <QStackedWidget>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include "task.h"
 #include "taskdialog.h"
 #include "headers/group.h"
@@ -50,6 +52,8 @@ private slots:
 
     void on_actionView_completed_tasks_triggered();
 
+    void on_actionNew_user_triggered();
+
 private:
     int getGroupIndex(QString group_name);
     void addGroupToUi(Group* group);
@@ -58,6 +62,8 @@ private:
     void setUpGroupped();
     void setUpUngroupped();
     void setUpComplete();
+
+    QJsonObject save_data;
     Ui::MainTasks *ui;
 
 };

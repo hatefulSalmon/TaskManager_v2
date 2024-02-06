@@ -3,6 +3,7 @@
 #include "headers/task.h"
 #include "headers/taskdialog.h"
 #include "headers/group.h"
+#include "user.h"
 
 #include <QScrollArea>
 #include <QVBoxLayout>
@@ -10,7 +11,8 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QStackedWidget>
-
+#include <QJsonDocument>
+#include <QJsonObject>
 
 MainTasks::MainTasks(QWidget *parent)
     : QMainWindow(parent)
@@ -73,6 +75,13 @@ MainTasks::MainTasks(QWidget *parent)
         addTaskToGroupUi(all_tasks[i]);
     }
 
+
+
+    QJsonObject save_data{
+        {"username", ""},
+        {"groups", {}},
+        {"tasks", {}}
+    };
 
 }
 
@@ -278,5 +287,13 @@ void MainTasks::on_actionSort_by_group_triggered()
 void MainTasks::on_actionView_completed_tasks_triggered()
 {
     setUpComplete();
+}
+
+
+void MainTasks::on_actionNew_user_triggered()
+{
+    User* current_user = new User("Current", all_tasks, all_groups);
+    current_user->updateData();
+    current_user->writeJsonFile("current_user");
 }
 

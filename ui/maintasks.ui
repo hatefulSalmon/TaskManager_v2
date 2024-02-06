@@ -47,6 +47,7 @@
     <property name="title">
      <string>Settings</string>
     </property>
+    <addaction name="separator"/>
     <addaction name="actionNew_user"/>
     <addaction name="actionChange_user"/>
     <addaction name="actionChange_color_theme"/>

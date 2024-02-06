@@ -13,14 +13,16 @@ SOURCES += \
     src/main.cpp \
     src/maintasks.cpp \
     src/task.cpp \
-    src/taskdialog.cpp
+    src/taskdialog.cpp \
+    src/user.cpp
 
 
 HEADERS += \
     headers/group.h \
     headers/maintasks.h \
     headers/task.h \
-    headers/taskdialog.h
+    headers/taskdialog.h \
+    headers/user.h
 
 
 FORMS += \
