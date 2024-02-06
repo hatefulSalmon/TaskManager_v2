@@ -17,9 +17,7 @@ MainTasks::MainTasks(QWidget *parent)
     , ui(new Ui::MainTasks)
 {
     ui->setupUi(this);
-
-    stack = new QStackedWidget;
-    ui->scrollarea_main->setWidget(stack);
+    stack = ui->stackedWidget;
 
     //SETTING UP GROUPPED CONTAINER
     QWidget* container_groupped = new QWidget();
@@ -31,7 +29,7 @@ MainTasks::MainTasks(QWidget *parent)
     add_group->setFixedSize(QSize(300, 30));
     groups_layout->addWidget(add_group);
     connect(add_group, &QPushButton::clicked, this, &MainTasks::groupAdd);
-    stack->addWidget(container_groupped);
+    ui->scrollarea_1->setWidget(container_groupped);
 
     //SETTING UP UNGROUPPED CONTAINER
     QWidget* container_ungroupped = new QWidget();
@@ -44,7 +42,7 @@ MainTasks::MainTasks(QWidget *parent)
     add_task->setFixedSize(QSize(300, 30));
     tasks_layout->addWidget(add_task);
     connect(add_task, &QPushButton::clicked, this, &MainTasks::taskAddFromUngroupped);
-    stack->addWidget(container_ungroupped);
+    ui->scrollarea_2->setWidget(container_ungroupped);
 
 
     //SETTING UP COMPLETE TASKS CONTAINER
@@ -52,7 +50,7 @@ MainTasks::MainTasks(QWidget *parent)
     QVBoxLayout *complete_layout = new QVBoxLayout(container_complete);
     complete_layout->setSizeConstraint(QLayout::SetMinimumSize);
     complete_layout->setAlignment(Qt::AlignCenter);
-    stack->addWidget(container_complete);
+    ui->scrollarea_3->setWidget(container_complete);
 
 
     // Unsorted tasks
@@ -103,18 +101,18 @@ void MainTasks::setUpUngroupped(){
 void MainTasks::setUpComplete()
 {
     stack->setCurrentIndex(2);
-    if(stack->currentWidget()->layout()->count() == 0){
+    if(ui->scrollarea_3->widget()->layout()->count() == 0){
         QMessageBox::information(this, "No tasks", "You haven't completed any tasks yet.");
     }
 }
 
 void MainTasks::addGroupToUi(Group* group){
-    int elements = stack->currentWidget()->layout()->count();
-    QLayoutItem* add_group = stack->currentWidget()->layout()->itemAt(elements-1);
-    stack->currentWidget()->layout()->removeItem(add_group);
-
-    stack->currentWidget()->layout()->addWidget(group);
-    stack->currentWidget()->layout()->addItem(add_group);
+    int elements = ui->scrollarea_1->widget()->layout()->count();
+    qDebug()<<elements;
+    QLayoutItem* add_group = ui->scrollarea_1->widget()->layout()->itemAt(elements-1);
+    ui->scrollarea_1->widget()->layout()->removeItem(add_group);
+    ui->scrollarea_1->widget()->layout()->addWidget(group);
+    ui->scrollarea_1->widget()->layout()->addItem(add_group);
 }
 
 void MainTasks::addTaskToGroupUi(Task* task){
@@ -137,12 +135,12 @@ void MainTasks::addTaskToUngrouppedUi(Task* task){
         task->changeToUndoneButton();
         return;
     }
-    int elements = stack->currentWidget()->layout()->count();
-    QLayoutItem* add_task = stack->currentWidget()->layout()->itemAt(elements-1);
-    stack->currentWidget()->layout()->removeItem(add_task);
+    int elements = ui->scrollarea_2->widget()->layout()->count();
+    QLayoutItem* add_task = ui->scrollarea_2->widget()->layout()->itemAt(elements-1);
+    ui->scrollarea_2->widget()->layout()->removeItem(add_task);
 
-    stack->currentWidget()->layout()->addWidget(task);
-    stack->currentWidget()->layout()->addItem(add_task);
+    ui->scrollarea_2->widget()->layout()->addWidget(task);
+    ui->scrollarea_2->widget()->layout()->addItem(add_task);
 }
 
 void MainTasks::groupAdd(){
@@ -247,7 +245,7 @@ void MainTasks::taskDelete(Task* task){
 }
 
 void MainTasks::taskComplete(Task* task){
-    stack->widget(2)->layout()->addWidget(task);
+    ui->scrollarea_3->widget()->layout()->addWidget(task);
 }
 
 int MainTasks::getGroupIndex(QString group_name){
